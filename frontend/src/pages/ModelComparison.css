@@ -1,0 +1,238 @@
+/* ================================================
+   🤖 MODEL COMPARISON (Premium Edition)
+================================================ */
+
+.mc-page {
+    padding: 80px 40px;
+    min-height: 100vh;
+}
+
+.mc-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mc-hero {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.mc-hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+}
+
+.mc-hero p {
+    color: var(--gray);
+    font-size: 1.1rem;
+}
+
+/* --- New Horizontal Matrix Chart --- */
+.mc-main-chart-card {
+    background: var(--dark-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 56px;
+    box-shadow: var(--shadow);
+    margin-bottom: 64px;
+}
+
+.mc-main-chart-card h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.performance-matrix {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.matrix-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.metric-name {
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-align: right;
+}
+
+.matrix-bars-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.matrix-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+}
+
+.model-abbr {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--white);
+    opacity: 0.8;
+}
+
+.model-val {
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.matrix-bar-track {
+    height: 10px;
+    background: var(--dark-lighter);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.matrix-bar-fill {
+    height: 100%;
+    border-radius: 20px;
+}
+
+.matrix-legend {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 860px) {
+    .matrix-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .metric-name {
+        text-align: left;
+    }
+}
+
+/* --- Metrics Grid --- */
+.mc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 64px;
+}
+
+.mc-card {
+    background: var(--dark-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    border-top: 4px solid var(--gray);
+    transition: var(--transition);
+}
+
+.mc-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.mc-card h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.mc-metric-row {
+    margin-bottom: 20px;
+}
+
+.mc-metric-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.mc-metric-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mc-metric-val {
+    font-weight: 800;
+    color: var(--white);
+}
+
+.mc-bar-track {
+    height: 8px;
+    background: var(--dark-lighter);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.mc-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    width: 0;
+    /* Base width */
+}
+
+@media (max-width: 1024px) {
+    .mc-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .mc-hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .mc-sbs-card {
+        padding: 32px 20px;
+    }
+
+    .sbs-container {
+        grid-template-columns: 1fr;
+    }
+}
