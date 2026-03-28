@@ -1,0 +1,50 @@
+{
+  "timestamp": "20260327_213536",
+  "target": "Digital_Eye_Strain_Risk",
+  "num_samples": 800,
+  "num_features": 11,
+  "results": {
+    "Logistic Regression": {
+      "test_accuracy": 95.62,
+      "test_f1": 95.6,
+      "test_precision": 95.77,
+      "test_recall": 95.62,
+      "cv_mean": 97.82,
+      "cv_std": 0.91,
+      "best_params": {
+        "clf__C": 10,
+        "clf__class_weight": null,
+        "clf__penalty": "l2",
+        "clf__solver": "lbfgs"
+      }
+    },
+    "SVM": {
+      "test_accuracy": 88.12,
+      "test_f1": 88.13,
+      "test_precision": 88.25,
+      "test_recall": 88.12,
+      "cv_mean": 90.03,
+      "cv_std": 2.84,
+      "best_params": {
+        "clf__C": 5,
+        "clf__class_weight": null,
+        "clf__gamma": "auto"
+      }
+    },
+    "XGBoost": {
+      "test_accuracy": 86.88,
+      "test_f1": 86.93,
+      "test_precision": 87.35,
+      "test_recall": 86.88,
+      "cv_mean": 85.78,
+      "cv_std": 1.91,
+      "best_params": {
+        "clf__colsample_bytree": 0.8,
+        "clf__learning_rate": 0.2,
+        "clf__max_depth": 3,
+        "clf__n_estimators": 300,
+        "clf__subsample": 0.8
+      }
+    }
+  }
+}
