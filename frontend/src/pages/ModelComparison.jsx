@@ -29,17 +29,17 @@ const ModelComparison = () => {
   if (loading) return <div className="page-loader"><div className="loader-ring" /><p>Evaluating AI Engines...</p></div>;
 
   const models = data?.comparison || data;
-  if (!models || Object.keys(models).length === 0 || !models['XGBoost']) {
+  if (!models || Object.keys(models).length === 0) {
     return (
       <div className="page-error">
-        ❌ Neural engines offline.
+        ❌ Neural engines offline or no performance data available.
         <br />
         <button onClick={() => window.location.reload()} className="btn-retry">Re-initialize</button>
       </div>
     );
   }
 
-  const bestName = data?.best_model || 'XGBoost';
+  const bestName = data?.best_model || Object.keys(models)[0];
   const bestData = models[bestName] || Object.values(models)[0] || {};
 
   return (
@@ -48,6 +48,14 @@ const ModelComparison = () => {
         <div className="mc-hero animate-fade-up">
           <h1 className="gradient-text">Model Performance Intelligence</h1>
           <p>Advanced metrics comparison of our core diagnostic engines.</p>
+        </div>
+
+        <div className="mc-best-summary animate-fade-up">
+          <h3>🏆 Best Performing Model</h3>
+          <p>
+            {bestName && <><strong>{bestName}</strong> with <strong>{bestData?.accuracy?.toFixed ? bestData.accuracy.toFixed(2) : bestData.accuracy}%</strong> accuracy.</>}
+            {!bestName && 'No best model selected.'}
+          </p>
         </div>
 
         {/* New Horizontal Grouped Comparison Chart */}
@@ -101,19 +109,22 @@ const ModelComparison = () => {
 
         {/* Model Cards Grid */}
         <div className="mc-grid">
-          {Object.entries(models).map(([name, m], i) => (
-            <motion.div
-              className="mc-card"
-              key={name}
-              style={{ borderTopColor: MODEL_COLORS[name] }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div className="card-header">
-                <span className="card-icon" style={{ background: MODEL_COLORS[name] }}>{MODEL_ICONS[name]}</span>
-                <h3>{name}</h3>
-              </div>
+          {Object.entries(models).map(([name, m], i) => {
+            const isBest = name === bestName;
+            return (
+              <motion.div
+                className={`mc-card ${isBest ? 'mc-card-best' : ''}`}
+                key={name}
+                style={{ borderTopColor: MODEL_COLORS[name] || '#ccc' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <div className="card-header">
+                  <span className="card-icon" style={{ background: MODEL_COLORS[name] || '#666' }}>{MODEL_ICONS[name] || '📌'}</span>
+                  <h3>{name}</h3>
+                  {isBest && <span className="best-chip">Best</span>}
+                </div>
 
               <div className="mc-metrics">
                 {METRICS.map(metric => (

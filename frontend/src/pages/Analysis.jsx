@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { getAnalysis } from '../api';
+import { getAnalysis, getModelComparison } from '../api';
 import './Analysis.css';
 
 const Analysis = () => {
   const [data, setData] = useState(null);
+  const [modelSummary, setModelSummary] = useState({ best_model: 'N/A', best_accuracy: null });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
-        const result = await getAnalysis();
-        setData(result);
+        const [analysisResult, comparisonResult] = await Promise.all([getAnalysis(), getModelComparison()]);
+        setData(analysisResult);
+
+        if (comparisonResult && comparisonResult.comparison && comparisonResult.best_model) {
+          const bestModelKey = comparisonResult.best_model;
+          const bestModelData = comparisonResult.comparison[bestModelKey] || {};
+          setModelSummary({
+            best_model: bestModelKey,
+            best_accuracy: bestModelData.accuracy ?? null,
+          });
+        }
       } catch (err) {
         console.error('Error fetching analysis:', err);
         toast.error('Failed to load dataset insights');
@@ -54,12 +64,14 @@ const Analysis = () => {
           </div>
           <div className="overview-item">
             <span className="ov-icon">🧪</span>
-            <span className="ov-val">96.8%</span>
-            <span className="ov-label">Model Precision</span>
+            <span className="ov-val">
+              {modelSummary.best_accuracy != null ? `${modelSummary.best_accuracy.toFixed(2)}%` : 'N/A'}
+            </span>
+            <span className="ov-label">Best Model Accuracy</span>
           </div>
           <div className="overview-item">
             <span className="ov-icon">⚡</span>
-            <span className="ov-val">XGB</span>
+            <span className="ov-val">{modelSummary.best_model || 'Unknown'}</span>
             <span className="ov-label">Top Engine</span>
           </div>
         </div>
