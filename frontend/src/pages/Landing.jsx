@@ -84,7 +84,7 @@ const Landing = () => {
           <motion.div className="model-card featured" variants={itemVariants}>
             <div className="featured-badge">Top Pick</div>
             <span className="model-icon">⚡</span>
-            <h3>XGBoost Intelligence</h3>
+            <h3>XGBoost Model</h3>
             <p>State-of-the-art gradient boosting that captures complex non-linear patterns in your daily screen habits.</p>
             <span className="model-tag">96.8% Accuracy</span>
           </motion.div>
@@ -112,7 +112,7 @@ const Landing = () => {
           {[
             { icon: '📱', title: 'Habit Analysis', desc: 'Real-time monitoring of screen time, break frequency, and digital ergonomics.' },
             { icon: '🌙', title: 'Circadian Insights', desc: 'Understand how nighttime blue light exposure affects your eye recovery and sleep.' },
-            { icon: '🔬', title: 'Explainable AI', desc: 'Detailed breakdown of which factors contribute most to your personal eye strain risk.' }
+            { icon: '🔬', title: 'Explainable ML', desc: 'Detailed breakdown of which factors contribute most to your personal eye strain risk.' }
           ].map((feature, i) => (
             <motion.div className="feature-card" key={i} variants={itemVariants}>
               <span className="feature-icon">{feature.icon}</span>

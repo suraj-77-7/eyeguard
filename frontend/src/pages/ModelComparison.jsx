@@ -26,13 +26,13 @@ const ModelComparison = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="page-loader"><div className="loader-ring" /><p>Evaluating AI Engines...</p></div>;
+  if (loading) return <div className="page-loader"><div className="loader-ring" /><p>Evaluating ML Engines...</p></div>;
 
   const models = data?.comparison || data;
   if (!models || Object.keys(models).length === 0) {
     return (
       <div className="page-error">
-        ❌ Neural engines offline or no performance data available.
+        ❌ ML engines offline or no performance data available.
         <br />
         <button onClick={() => window.location.reload()} className="btn-retry">Re-initialize</button>
       </div>

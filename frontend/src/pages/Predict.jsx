@@ -63,7 +63,7 @@ const Predict = () => {
                 });
                 setRecs(recData.recommendations || []);
                 
-                toast.success('AI Analysis Complete');
+                toast.success('ML Analysis Complete');
             }
         } catch (err) {
             toast.error(err.message || 'Prediction failed');
@@ -86,7 +86,7 @@ const Predict = () => {
                 >
                     <h1>Vision Analyzer</h1>
                     <p className="predict-desc">
-                        Provide your digital habits below. Our ensemble of AI models will analyze the patterns to estimate your eye strain risk.
+                        Provide your digital habits below. Our ensemble of ML models will analyze the patterns to estimate your eye strain risk.
                     </p>
 
                     <form className="predict-form" onSubmit={handleSubmit}>
@@ -194,7 +194,7 @@ const Predict = () => {
 
                         <div className="form-submit-row">
                             <button type="submit" className="btn-premium btn-predict" disabled={loading}>
-                                {loading ? 'Analyzing Habits...' : 'Run AI Diagnosis'}
+                                {loading ? 'Analyzing Habits...' : 'Run ML Diagnosis'}
                             </button>
                         </div>
                     </form>
@@ -245,8 +245,8 @@ const Predict = () => {
                                     </div>
                                 </div>
 
-                                <div className="ai-insight animate-fade-in delay-2" style={{ marginTop: '32px', textAlign: 'left' }}>
-                                    <h4 style={{ fontSize: '0.9rem', color: 'var(--gray)', marginBottom: '8px' }}>🤖 AI Insight</h4>
+                                <div className="ml-insight animate-fade-in delay-2" style={{ marginTop: '32px', textAlign: 'left' }}>
+                                    <h4 style={{ fontSize: '0.9rem', color: 'var(--gray)', marginBottom: '8px' }}>🤖 ML Insight</h4>
                                     <p style={{ fontSize: '0.95rem', lineHeight: '1.5' }}>
                                         {riskPercent > 60
                                             ? "Critical risk detected. Recommend immediate screen reduction and 20-20-20 rule implementation."
@@ -294,7 +294,7 @@ const Predict = () => {
                                         ))}
                                     </div>
                                     <p style={{ fontSize: '0.7rem', color: 'var(--gray)', marginTop: '12px', fontStyle: 'italic' }}>
-                                        *Showing real-time damage probability from each AI engine.
+                                        *Showing real-time damage probability from each ML engine.
                                     </p>
                                 </div>
                             </motion.div>
