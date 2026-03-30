@@ -1,5 +1,7 @@
 # Eye Health App
 
+**Repository:** https://github.com/suraj-77-7/eyeguard
+
 ## Quick start
 
 1. Ensure Python and Node.js/npm are installed and on PATH.
