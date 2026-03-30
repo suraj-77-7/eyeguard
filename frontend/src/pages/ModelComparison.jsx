@@ -126,27 +126,28 @@ const ModelComparison = () => {
                   {isBest && <span className="best-chip">Best</span>}
                 </div>
 
-              <div className="mc-metrics">
-                {METRICS.map(metric => (
-                  <div className="mc-metric-row" key={metric}>
-                    <div className="mc-metric-info">
-                      <span className="mc-metric-label">{metric.replace('_', ' ')}</span>
-                      <span className="mc-metric-val">{m[metric] || 0}%</span>
+                <div className="mc-metrics">
+                  {METRICS.map(metric => (
+                    <div className="mc-metric-row" key={metric}>
+                      <div className="mc-metric-info">
+                        <span className="mc-metric-label">{metric.replace('_', ' ')}</span>
+                        <span className="mc-metric-val">{m[metric] || 0}%</span>
+                      </div>
+                      <div className="mc-bar-track">
+                        <motion.div
+                          className="mc-bar-fill"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${m[metric] || 0}%` }}
+                          transition={{ duration: 1.5, delay: 0.5 + i * 0.2 }}
+                          style={{ background: MODEL_COLORS[name] }}
+                        />
+                      </div>
                     </div>
-                    <div className="mc-bar-track">
-                      <motion.div
-                        className="mc-bar-fill"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${m[metric] || 0}%` }}
-                        transition={{ duration: 1.5, delay: 0.5 + i * 0.2 }}
-                        style={{ background: MODEL_COLORS[name] }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>
