@@ -18,8 +18,8 @@
 
 /* --- Form Section --- */
 .predict-form-section {
-  background: var(--dark-soft);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--dark-card) 0%, rgba(131, 56, 236, 0.05) 100%);
+  border: 2px solid var(--border);
   padding: 56px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Toaster } from 'react-hot-toast';
 import { loadSlim } from 'tsparticles-slim';
 import Particles from 'react-tsparticles';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
@@ -20,20 +19,74 @@ import EyeCare from './pages/EyeCare';
 import './App.css';
 
 const particleOptions = {
-  background: { color: { value: "#020617" } },
+  background: { color: { value: "transparent" } },
   fpsLimit: 60,
   interactivity: {
-    events: { onHover: { enable: true, mode: "repulse" }, resize: true },
-    modes: { repulse: { distance: 80, duration: 0.4 } },
+    events: { onHover: { enable: true, mode: 'bubble' }, resize: true },
+    modes: {
+      bubble: {
+        distance: 140,
+        size: 9,
+        duration: 1.4,
+        opacity: 0.8,
+      },
+    },
   },
   particles: {
-    color: { value: "#ffffff" },
-    links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.1, width: 1 },
-    move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 0.5, straight: false },
-    number: { density: { enable: true, area: 800 }, value: 80 },
-    opacity: { value: 0.2 },
-    shape: { type: "circle" },
-    size: { value: { min: 1, max: 5 } },
+    color: {
+      value: ['#f4d35e', '#4ecdc4', '#ee964b', '#f95738'],
+    },
+    links: {
+      enable: true,
+      distance: 120,
+      color: '#f4d35e',
+      opacity: 0.08,
+      width: 0.8,
+      triangles: {
+        enable: true,
+        opacity: 0.015,
+      },
+    },
+    move: {
+      angle: { offset: 0, value: 35 },
+      direction: 'top-right',
+      enable: true,
+      outModes: { default: 'out' },
+      speed: 0.8,
+      trail: {
+        enable: true,
+        length: 4,
+        fill: {
+          color: '#0b0f1f',
+        },
+      },
+      wobble: {
+        enable: true,
+        distance: 7,
+        speed: { min: -5, max: 5 },
+      },
+    },
+    number: {
+      density: { enable: true, area: 1000 },
+      value: 70,
+    },
+    opacity: {
+      value: { min: 0.08, max: 0.6 },
+      animation: {
+        enable: true,
+        speed: 0.6,
+        sync: false,
+      },
+    },
+    shape: { type: ['circle', 'triangle'] },
+    size: {
+      value: { min: 1, max: 3.8 },
+      animation: {
+        enable: true,
+        speed: 1.2,
+        sync: false,
+      },
+    },
   },
   detectRetina: true,
 };
@@ -42,27 +95,18 @@ const AppRoutes = () => {
   const location = useLocation();
 
   return (
-    // AnimatePresence allows components to animate out before unmounting
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/predict" element={<Predict />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/models" element={<ModelComparison />} />
-          <Route path="/eyecare" element={<EyeCare />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <div>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/predict" element={<Predict />} />
+        <Route path="/analysis" element={<Analysis />} />
+        <Route path="/models" element={<ModelComparison />} />
+        <Route path="/eyecare" element={<EyeCare />} />
+      </Routes>
+    </div>
   );
 };
 

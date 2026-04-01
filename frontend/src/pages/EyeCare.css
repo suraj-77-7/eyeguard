@@ -5,7 +5,7 @@
 .eyecare-page {
     padding: 80px 40px;
     min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, var(--primary-glow) 0%, transparent 50%);
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0033 50%, #0f0f1e 100%);
 }
 
 .eyecare-container {
@@ -26,7 +26,7 @@
 }
 
 .eyecare-hero p {
-    color: var(--gray);
+    color: #a0aec0;
     font-size: 1.2rem;
     max-width: 700px;
     margin: 0 auto;
@@ -35,59 +35,67 @@
 /* --- Grid Layout --- */
 .eyecare-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 32px;
 }
 
 .eyecare-card {
-    padding: 48px 32px;
+    padding: 32px;
     position: relative;
-    transition: var(--transition);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(26, 26, 46, 0.6) !important;
+    border: 2px solid rgba(0, 217, 255, 0.2) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.1);
 }
 
 .eyecare-card:hover {
     transform: translateY(-8px);
-    border-color: var(--primary);
-    box-shadow: var(--shadow-glow);
+    border-color: rgba(0, 217, 255, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 217, 255, 0.2);
 }
 
 .card-icon {
     font-size: 2.5rem;
     margin-bottom: 24px;
     display: block;
-    filter: drop-shadow(0 0 10px var(--primary-glow));
+    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.4));
 }
 
 .eyecare-card h3 {
     font-size: 1.5rem;
     font-weight: 800;
     margin-bottom: 16px;
-    color: var(--white);
+    color: #f5f5f5;
 }
 
 .eyecare-card p {
-    color: var(--gray);
+    color: #a0aec0;
     font-size: 1rem;
     line-height: 1.6;
 }
 
 /* --- Special Card Variants --- */
 .featured-card {
-    grid-column: span 2;
-    background: linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(99, 102, 241, 0.05));
-    border-color: var(--primary-glow);
+    border-color: rgba(255, 0, 110, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(255, 0, 110, 0.1) !important;
+}
+
+.featured-card:hover {
+    border-color: rgba(255, 0, 110, 0.5);
+    box-shadow: 0 20px 50px rgba(255, 0, 110, 0.2) !important;
 }
 
 .importance-card {
-    grid-column: span 3;
-    text-align: center;
-    background: linear-gradient(135deg, var(--dark-soft), var(--dark));
+    grid-column: span auto;
+    border-color: rgba(131, 56, 236, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(131, 56, 236, 0.1) !important;
 }
 
-.importance-card p {
-    max-width: 800px;
-    margin: 0 auto;
-    font-size: 1.1rem;
+.importance-card:hover {
+    border-color: rgba(131, 56, 236, 0.5);
+    box-shadow: 0 20px 50px rgba(131, 56, 236, 0.2) !important;
 }
 
 /* --- List Styling --- */
@@ -102,7 +110,7 @@
 .info-list li {
     position: relative;
     padding-left: 24px;
-    color: var(--gray);
+    color: #a0aec0;
     font-size: 0.95rem;
 }
 
@@ -110,7 +118,7 @@
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--primary);
+    color: #00d9ff;
     font-weight: 900;
 }
 
@@ -122,13 +130,25 @@
 }
 
 .symptom-tag {
-    background: var(--dark-lighter);
-    color: var(--primary);
-    padding: 6px 14px;
+    background: rgba(0, 217, 255, 0.1);
+    color: #00d9ff;
+    padding: 8px 16px;
     border-radius: 100px;
-    font-size: 0.85rem;
+    font-size: '0.85rem';
     font-weight: 700;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+.symptom-tag:nth-child(2n) {
+    background: rgba(255, 0, 110, 0.1);
+    color: #ff006e;
+    border-color: rgba(255, 0, 110, 0.3);
+}
+
+.symptom-tag:nth-child(3n) {
+    background: rgba(131, 56, 236, 0.1);
+    color: #8338ec;
+    border-color: rgba(131, 56, 236, 0.3);
 }
 
 /* --- Food Grid --- */
@@ -140,30 +160,40 @@
 }
 
 .food-item {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    background: rgba(0, 217, 255, 0.08);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: '0.9rem';
     font-weight: 600;
-    color: var(--white);
-    border: 1px solid var(--border);
+    color: #f5f5f5;
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.food-item:hover {
+    background: rgba(0, 217, 255, 0.15);
+    border-color: rgba(0, 217, 255, 0.4);
 }
 
 /* --- Limit Box --- */
 .limit-box {
     margin: 24px 0;
-    background: var(--primary-glow);
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(255, 0, 110, 0.1));
     padding: 24px;
-    border-radius: var(--radius);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 2px solid rgba(0, 217, 255, 0.2);
 }
 
 .limit-val {
     font-size: 2.5rem;
     font-weight: 900;
-    color: var(--primary);
+    background: linear-gradient(90deg, #00d9ff, #ff006e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .limit-label {
@@ -171,7 +201,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--gray);
+    color: #a0aec0;
 }
 
 .limit-note {
@@ -180,13 +210,30 @@
 }
 
 @media (max-width: 1024px) {
-    .eyecare-grid { grid-template-columns: 1fr 1fr; }
-    .featured-card { grid-column: span 2; }
-    .importance-card { grid-column: span 2; }
+    .eyecare-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .featured-card {
+        grid-column: span 2;
+    }
+
+    .importance-card {
+        grid-column: span 2;
+    }
 }
 
 @media (max-width: 768px) {
-    .eyecare-grid { grid-template-columns: 1fr; }
-    .featured-card, .importance-card { grid-column: span 1; }
-    .eyecare-page { padding: 40px 20px; }
+    .eyecare-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .featured-card,
+    .importance-card {
+        grid-column: span 1;
+    }
+
+    .eyecare-page {
+        padding: 40px 20px;
+    }
 }

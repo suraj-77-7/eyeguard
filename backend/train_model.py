@@ -32,8 +32,6 @@ from sklearn.model_selection import (
 )
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from xgboost import XGBClassifier
 from sklearn.ensemble import VotingClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -211,24 +209,6 @@ def get_model_configs():
                 "clf__class_weight": [None, "balanced"],
             },
         },
-        "SVM": {
-            "model": SVC(kernel="rbf", probability=True, random_state=42),
-            "params": {
-                "clf__C": [0.5, 1, 5],
-                "clf__gamma": ["scale", "auto"],
-                "clf__class_weight": [None, "balanced"],
-            },
-        },
-        "XGBoost": {
-            "model": XGBClassifier(use_label_encoder=False, eval_metric='mlogloss', random_state=42),
-            "params": {
-                "clf__max_depth": [3, 4, 5, 6],
-                "clf__n_estimators": [100, 200, 300],
-                "clf__learning_rate": [0.01, 0.05, 0.1, 0.2],
-                "clf__subsample": [0.8, 1.0],
-                "clf__colsample_bytree": [0.8, 1.0],
-            },
-        },
     }
 
 
@@ -374,24 +354,7 @@ def save_reports(results, feature_names, target_col, label_encoders, X, y, model
     plt.close()
     log("📊 Model comparison plot saved.", Colors.GREEN)
 
-    # 3b. Feature Importance (XGBoost if available)
-    xgb = models.get("XGBoost")
-    if xgb and hasattr(xgb.named_steps.get("clf", xgb), "feature_importances_"):
-        importances = xgb.named_steps["clf"].feature_importances_
-        feat_imp = sorted(zip(feature_names, importances), key=lambda x: x[1], reverse=True)[:10]
-        features, imps = zip(*feat_imp)
-
-        plt.figure(figsize=(10, 6))
-        sns.barplot(x=list(imps), y=list(features), palette="viridis")
-        plt.title("Top 10 Feature Importances (XGBoost)")
-        plt.xlabel("Importance")
-        plt.ylabel("Feature")
-        plt.tight_layout()
-        plt.savefig(REPORT_DIR / f"feature_importance_{timestamp}.png", dpi=150)
-        plt.close()
-        log("🌟 Feature importance plot saved.", Colors.GREEN)
-
-    # 3c. Confusion Matrices (subplots for each model)
+    # 3b. Confusion Matrices (subplots for each model)
     # We need X_test predictions — but we only have models; to avoid re-splitting,
     # we’ll skip confusion matrix plots here to keep script simple & fast.
     # (You can extend this to generate CM plots by passing X_test/y_test if desired.)
@@ -406,8 +369,6 @@ def save_models_and_artifacts(models, feature_names, label_encoders, scaler, res
 
     artifacts = {
         "logistic_model.pkl": models.get("Logistic Regression"),
-        "svm_model.pkl": models.get("SVM"),
-        "xgb_model.pkl": models.get("XGBoost"),
         "scaler.pkl": scaler,
         "label_encoders.pkl": label_encoders,
         "feature_names.pkl": feature_names,

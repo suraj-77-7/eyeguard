@@ -270,9 +270,7 @@ def load_pickle(filename):
 
 try:
     models = {
-        'logistic': load_pickle('logistic_model.pkl'),
-        'svm': load_pickle('svm_model.pkl'),
-        'xgboost': load_pickle('xgb_model.pkl')
+        'logistic': load_pickle('logistic_model.pkl')
     }
     scaler = load_pickle('scaler.pkl')
     feature_names = load_pickle('feature_names.pkl')
@@ -955,18 +953,6 @@ def model_comparison():
             best_name = name
 
     feature_importance = []
-    # Use XGBoost for feature importance
-    # XGBoost is stored as 'XGBoost' in models dict now (from train_model.py artifacts)
-    xgb_model = models.get('xgboost')
-    if xgb_model and hasattr(xgb_model.named_steps['clf'], 'feature_importances_'):
-        importances = xgb_model.named_steps['clf'].feature_importances_
-        for i, imp in enumerate(importances):
-            fname = feature_names[i] if i < len(feature_names) else f"Feature {i}"
-            feature_importance.append({
-                'feature': fname,
-                'importance': float(imp)
-            })
-        feature_importance.sort(key=lambda x: x['importance'], reverse=True)
 
     payload = {
         'comparison': comp,

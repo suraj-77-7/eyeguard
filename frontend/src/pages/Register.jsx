@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
@@ -13,6 +14,30 @@ export default function Register() {
 
   const { register } = useAuth() || {};
   const navigate = useNavigate();
+
+  const pageVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 26, scale: 0.97, rotateX: -6 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotateX: 0,
+      transition: { type: 'spring', stiffness: 145, damping: 16 },
+    },
+  };
+
+  const fieldVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0 },
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,15 +72,24 @@ export default function Register() {
   };
 
   return (
-    <div className="auth-page">
+    <motion.div
+      className="auth-page auth-page--register"
+      variants={pageVariants}
+      initial="hidden"
+      animate="show"
+    >
       <div className="auth-bg">
+        <div className="auth-grid" />
         <div className="auth-shape s1" />
         <div className="auth-shape s2" />
         <div className="auth-shape s3" />
+        <div className="auth-ring r1" />
+        <div className="auth-ring r2" />
       </div>
 
-      <div className="auth-card animate-scale-in">
+      <motion.div className="auth-card auth-card--register" variants={cardVariants}>
         <div className="auth-header">
+          <span className="auth-kicker">Create Your Profile</span>
           <div className="auth-icon-ring">
             <span className="auth-icon-emoji">🛡️</span>
           </div>
@@ -64,7 +98,7 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
+          <motion.div className="form-group" variants={fieldVariants}>
             <label htmlFor="name">👤 Full Name</label>
             <input
               id="name"
@@ -75,9 +109,9 @@ export default function Register() {
               required
               disabled={loading}
             />
-          </div>
+          </motion.div>
 
-          <div className="form-group">
+          <motion.div className="form-group" variants={fieldVariants}>
             <label htmlFor="email">📧 Email Address</label>
             <input
               id="email"
@@ -88,9 +122,9 @@ export default function Register() {
               required
               disabled={loading}
             />
-          </div>
+          </motion.div>
 
-          <div className="form-group">
+          <motion.div className="form-group" variants={fieldVariants}>
             <label htmlFor="password">🔒 Password</label>
             <div className="input-password">
               <input
@@ -118,9 +152,16 @@ export default function Register() {
                 <span>{password.length >= 8 ? 'Strong' : password.length >= 6 ? 'Good' : 'Weak'}</span>
               </div>
             )}
-          </div>
+          </motion.div>
 
-          <button type="submit" className="btn-auth" disabled={loading}>
+          <motion.button
+            type="submit"
+            className="btn-auth"
+            disabled={loading}
+            variants={fieldVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+          >
             {loading ? (
               <>
                 <span className="btn-spinner" /> Creating...
@@ -130,7 +171,12 @@ export default function Register() {
                 Create Account <span className="btn-arrow">→</span>
               </>
             )}
-          </button>
+          </motion.button>
+
+          <motion.div className="auth-note" variants={fieldVariants}>
+            <span className="auth-note-dot" />
+            Your data stays encrypted and private
+          </motion.div>
         </form>
 
         <p className="auth-switch">
@@ -142,7 +188,7 @@ export default function Register() {
           <span>📊 Free Analysis</span>
           <span>🧠 AI Insights</span>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

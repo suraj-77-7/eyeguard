@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
@@ -15,6 +16,30 @@ export default function Login() {
   const location = useLocation();
 
   const from = location.state?.from?.pathname || '/predict';
+
+  const pageVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.09, delayChildren: 0.12 },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 28, scale: 0.97, rotateX: -8 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotateX: 0,
+      transition: { type: 'spring', stiffness: 150, damping: 17 },
+    },
+  };
+
+  const fieldVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0 },
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,15 +69,24 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-page">
+    <motion.div
+      className="auth-page auth-page--login"
+      variants={pageVariants}
+      initial="hidden"
+      animate="show"
+    >
       <div className="auth-bg">
+        <div className="auth-grid" />
         <div className="auth-shape s1" />
         <div className="auth-shape s2" />
         <div className="auth-shape s3" />
+        <div className="auth-ring r1" />
+        <div className="auth-ring r2" />
       </div>
 
-      <div className="auth-card">
+      <motion.div className="auth-card auth-card--login" variants={cardVariants}>
         <div className="auth-header">
+          <span className="auth-kicker">EyeGuard Access</span>
           <div className="auth-icon-ring">
             <span className="auth-icon-emoji">👁️</span>
           </div>
@@ -61,7 +95,7 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
+          <motion.div className="form-group" variants={fieldVariants}>
             <label htmlFor="email">📧 Email Address</label>
             <input
               id="email"
@@ -72,9 +106,9 @@ export default function Login() {
               required
               disabled={loading}
             />
-          </div>
+          </motion.div>
 
-          <div className="form-group">
+          <motion.div className="form-group" variants={fieldVariants}>
             <label htmlFor="password">🔒 Password</label>
             <div className="input-password">
               <input
@@ -96,12 +130,15 @@ export default function Login() {
                 {showPwd ? '🙈' : '👁️'}
               </button>
             </div>
-          </div>
+          </motion.div>
 
-          <button
+          <motion.button
             type="submit"
             className="btn-auth"
             disabled={loading}
+            variants={fieldVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
           >
             {loading ? (
               <>
@@ -113,7 +150,12 @@ export default function Login() {
                 Sign In <span className="btn-arrow">→</span>
               </>
             )}
-          </button>
+          </motion.button>
+
+          <motion.div className="auth-note" variants={fieldVariants}>
+            <span className="auth-note-dot" />
+            Session protection is active
+          </motion.div>
         </form>
 
         <p className="auth-switch">
@@ -125,7 +167,7 @@ export default function Login() {
           <span>⚡ Instant</span>
           <span>🆓 Free</span>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

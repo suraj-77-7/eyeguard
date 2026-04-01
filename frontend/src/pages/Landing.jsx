@@ -7,21 +7,26 @@ const Landing = () => {
   const navigate = useNavigate();
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, scale: 0.99 },
     visible: {
       opacity: 1,
+      scale: 1,
       transition: {
-        staggerChildren: 0.2,
+        delayChildren: 0.1,
+        staggerChildren: 0.12,
+        when: 'beforeChildren',
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 28, opacity: 0, rotate: -1.2, filter: 'blur(4px)' },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'spring', stiffness: 100 },
+      rotate: 0,
+      filter: 'blur(0px)',
+      transition: { type: 'spring', stiffness: 140, damping: 14 },
     },
   };
 
@@ -35,8 +40,11 @@ const Landing = () => {
       >
         {/* Background Visuals */}
         <div className="hero-bg-shapes">
-          <div className="shape shape-1" />
-          <div className="shape shape-2" />
+          <div className="shape shape-1" aria-hidden="true" />
+          <div className="shape shape-2" aria-hidden="true" />
+          <div className="shape shape-3" aria-hidden="true" />
+          <div className="orbit-ring orbit-ring-1" aria-hidden="true" />
+          <div className="orbit-ring orbit-ring-2" aria-hidden="true" />
         </div>
 
         <motion.div className="hero-content" variants={itemVariants}>
@@ -80,21 +88,6 @@ const Landing = () => {
             <p>Baseline probabilistic model providing clear, interpretable coefficients for risk factor analysis.</p>
             <span className="model-tag">Fast & Reliable</span>
           </motion.div>
-
-          <motion.div className="model-card featured" variants={itemVariants}>
-            <div className="featured-badge">Top Pick</div>
-            <span className="model-icon">⚡</span>
-            <h3>XGBoost Model</h3>
-            <p>State-of-the-art gradient boosting that captures complex non-linear patterns in your daily screen habits.</p>
-            <span className="model-tag">96.8% Accuracy</span>
-          </motion.div>
-
-          <motion.div className="model-card" variants={itemVariants}>
-            <span className="model-icon">🎯</span>
-            <h3>SVM Classifier</h3>
-            <p>High-dimensional vector analysis to find the optimal decision boundary for strain categorization.</p>
-            <span className="model-tag">Robust Performance</span>
-          </motion.div>
         </div>
       </motion.section>
 
@@ -110,9 +103,9 @@ const Landing = () => {
         <motion.p className="section-sub" variants={itemVariants}>Everything you need to monitor and preserve your visual well-being.</motion.p>
         <div className="features-grid">
           {[
-            { icon: '📱', title: 'Habit Analysis', desc: 'Real-time monitoring of screen time, break frequency, and digital ergonomics.' },
-            { icon: '🌙', title: 'Circadian Insights', desc: 'Understand how nighttime blue light exposure affects your eye recovery and sleep.' },
-            { icon: '🔬', title: 'Explainable ML', desc: 'Detailed breakdown of which factors contribute most to your personal eye strain risk.' }
+            { icon: '🤖', title: 'ML-Powered Risk Assessment', desc: 'Advanced logistic regression model analyzes your digital eye strain risk with clinical accuracy.' },
+            { icon: '💡', title: 'Smart Personalized Recommendations', desc: 'Get tailored advice based on your screen habits, break frequency, and usage patterns.' },
+            { icon: '📊', title: 'Health Tracking & Streaks', desc: 'Monitor your daily eye health progress and build healthy habits with streak tracking.' }
           ].map((feature, i) => (
             <motion.div className="feature-card" key={i} variants={itemVariants}>
               <span className="feature-icon">{feature.icon}</span>

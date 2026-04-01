@@ -53,16 +53,16 @@ const Predict = () => {
 
             if (data?.results) {
                 setPrediction(data);
-                const bestResult = data.results['XGBoost'] || Object.values(data.results)[0];
+                const bestResult = data.results['Logistic Regression'] || Object.values(data.results)[0];
                 setRiskPercent(bestResult?.damage_percent || 0);
-                
+
                 // Fetch recommendations
-                const recData = await getRecommendations({ 
+                const recData = await getRecommendations({
                     features: payloadFeatures,
-                    risk_level: bestResult?.risk_level 
+                    risk_level: bestResult?.risk_level
                 });
                 setRecs(recData.recommendations || []);
-                
+
                 toast.success('ML Analysis Complete');
             }
         } catch (err) {
@@ -73,7 +73,7 @@ const Predict = () => {
     };
 
     const bestModelResult = prediction?.results
-        ? (prediction.results['XGBoost'] || Object.values(prediction.results)[0])
+        ? (prediction.results['Logistic Regression'] || Object.values(prediction.results)[0])
         : null;
 
     return (
@@ -86,7 +86,7 @@ const Predict = () => {
                 >
                     <h1>Vision Analyzer</h1>
                     <p className="predict-desc">
-                        Provide your digital habits below. Our ensemble of ML models will analyze the patterns to estimate your eye strain risk.
+                        Provide your digital habits below. Our advanced logistic regression model will analyze the patterns to estimate your eye strain risk.
                     </p>
 
                     <form className="predict-form" onSubmit={handleSubmit}>
@@ -270,33 +270,6 @@ const Predict = () => {
                                         </div>
                                     </div>
                                 )}
-
-                                {/* NEW: Real-time Model Comparison */}
-                                <div className="ensemble-comparison animate-fade-in delay-3" style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
-                                    <h4 style={{ fontSize: '0.9rem', color: 'var(--gray)', marginBottom: '16px', textAlign: 'left' }}>⚖️ Ensemble Comparison</h4>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                        {Object.entries(prediction.results).map(([name, res]) => (
-                                            <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                <span style={{ fontSize: '0.75rem', width: '80px', textAlign: 'left', color: 'var(--gray)', fontWeight: '700' }}>{name.split(' ')[0]}</span>
-                                                <div style={{ flex: 1, height: '6px', background: 'var(--dark-lighter)', borderRadius: '10px', overflow: 'hidden' }}>
-                                                    <motion.div
-                                                        initial={{ width: 0 }}
-                                                        animate={{ width: `${res.damage_percent}%` }}
-                                                        style={{
-                                                            height: '100%',
-                                                            background: res.damage_percent > 65 ? '#f43f5e' : res.damage_percent > 35 ? '#f59e0b' : '#10b981',
-                                                            borderRadius: '10px'
-                                                        }}
-                                                    />
-                                                </div>
-                                                <span style={{ fontSize: '0.75rem', fontWeight: '800', width: '35px' }}>{Math.round(res.damage_percent)}%</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p style={{ fontSize: '0.7rem', color: 'var(--gray)', marginTop: '12px', fontStyle: 'italic' }}>
-                                        *Showing real-time damage probability from each ML engine.
-                                    </p>
-                                </div>
                             </motion.div>
                         ) : (
                             <div className="result-placeholder glass-card">
