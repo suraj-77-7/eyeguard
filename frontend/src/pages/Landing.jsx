@@ -63,6 +63,9 @@ const Landing = () => {
             <button className="btn-premium" onClick={() => navigate('/predict')}>
               Start Prediction <span className="btn-icon">→</span>
             </button>
+            <button className="btn-secondary" onClick={() => navigate('/games')}>
+              Play Eye Games
+            </button>
             <button className="btn-secondary" onClick={() => navigate('/eyecare')}>
               Eye Care Information
             </button>

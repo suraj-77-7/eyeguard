@@ -49,6 +49,9 @@ export default function Navbar() {
           <Link to="/eyecare" className={`nav-link ${isActive('/eyecare') ? 'active' : ''}`}>
             <span className="link-icon">🥕</span> Eye Care
           </Link>
+          <Link to="/games" className={`nav-link ${isActive('/games') ? 'active' : ''}`}>
+            <span className="link-icon">🎮</span> Games
+          </Link>
         </div>
 
         <div className="nav-right">

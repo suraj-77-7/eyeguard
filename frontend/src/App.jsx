@@ -15,6 +15,7 @@ import Predict from './pages/Predict';
 import Analysis from './pages/Analysis';
 import ModelComparison from './pages/ModelComparison';
 import EyeCare from './pages/EyeCare';
+import Games from './pages/Games';
 
 import './App.css';
 
@@ -105,6 +106,7 @@ const AppRoutes = () => {
         <Route path="/analysis" element={<Analysis />} />
         <Route path="/models" element={<ModelComparison />} />
         <Route path="/eyecare" element={<EyeCare />} />
+        <Route path="/games" element={<Games />} />
       </Routes>
     </div>
   );
