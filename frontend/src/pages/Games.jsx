@@ -20,10 +20,12 @@ const EMOJI_SETS = {
 };
 
 const LEVELS = {
-    easy: { label: 'Easy', rounds: 6, colorOptions: 4, objectCells: 16, objectCols: 4, reactionRounds: 4 },
-    medium: { label: 'Medium', rounds: 8, colorOptions: 6, objectCells: 25, objectCols: 5, reactionRounds: 5 },
-    hard: { label: 'Hard', rounds: 10, colorOptions: 8, objectCells: 36, objectCols: 6, reactionRounds: 6 },
+    easy: { label: 'Easy', rounds: 6, colorOptions: 4, objectCells: 16, objectCols: 4, reactionRounds: 4, patternRounds: 4, patternLength: 4, revealMs: 2300 },
+    medium: { label: 'Medium', rounds: 8, colorOptions: 6, objectCells: 25, objectCols: 5, reactionRounds: 5, patternRounds: 5, patternLength: 5, revealMs: 1800 },
+    hard: { label: 'Hard', rounds: 10, colorOptions: 8, objectCells: 36, objectCols: 6, reactionRounds: 6, patternRounds: 6, patternLength: 6, revealMs: 1400 },
 };
+
+const PATTERN_SYMBOLS = ['▲', '■', '●', '◆', '✦', '⬢'];
 
 const STORAGE_KEY = 'eyeguard_games_best_v1';
 
@@ -33,6 +35,7 @@ const DAILY_CHALLENGES = [
     { tab: 'reaction', level: 'hard', title: 'Lightning Reflex', goal: 'Keep average reaction under 420ms.' },
     { tab: 'color', level: 'hard', title: 'Spectrum Master', goal: 'Beat hard color rounds with high accuracy.' },
     { tab: 'object', level: 'hard', title: 'Focus Tunnel', goal: 'Clear hard object grid with 70%+ hits.' },
+    { tab: 'pattern', level: 'medium', title: 'Memory Matrix', goal: 'Replay symbol sequences with high streak.' },
 ];
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
@@ -59,10 +62,23 @@ function nextObjectRound(levelKey) {
     return { base, odd, oddIndex, startedAt: Date.now() };
 }
 
+function nextPatternRound(levelKey) {
+    const level = LEVELS[levelKey];
+    const sequence = Array.from({ length: level.patternLength }).map(
+        () => PATTERN_SYMBOLS[Math.floor(Math.random() * PATTERN_SYMBOLS.length)]
+    );
+
+    return {
+        sequence,
+        startedAt: Date.now(),
+    };
+}
+
 export default function Games() {
     const [activeTab, setActiveTab] = useState('color');
     const [level, setLevel] = useState('easy');
     const reactionTimerRef = useRef(null);
+    const patternTimerRef = useRef(null);
 
     const [colorRound, setColorRound] = useState(() => nextColorRound('easy'));
     const [colorCount, setColorCount] = useState(1);
@@ -89,6 +105,16 @@ export default function Games() {
     const [reactionTimes, setReactionTimes] = useState([]);
     const [reactionDone, setReactionDone] = useState(false);
     const [reactionStartAt, setReactionStartAt] = useState(0);
+
+    const [patternRound, setPatternRound] = useState(() => nextPatternRound('easy'));
+    const [patternCount, setPatternCount] = useState(1);
+    const [patternScore, setPatternScore] = useState(0);
+    const [patternHits, setPatternHits] = useState(0);
+    const [patternStreak, setPatternStreak] = useState(0);
+    const [patternTimes, setPatternTimes] = useState([]);
+    const [patternDone, setPatternDone] = useState(false);
+    const [patternInput, setPatternInput] = useState([]);
+    const [patternReveal, setPatternReveal] = useState(true);
     const [bestStats, setBestStats] = useState(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
@@ -113,6 +139,11 @@ export default function Games() {
         return reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
     }, [reactionTimes]);
 
+    const patternAvg = useMemo(() => {
+        if (!patternTimes.length) return 0;
+        return patternTimes.reduce((a, b) => a + b, 0) / patternTimes.length;
+    }, [patternTimes]);
+
     const dailyChallenge = useMemo(() => {
         const daySeed = Number(new Date().toISOString().slice(0, 10).replace(/-/g, ''));
         const index = daySeed % DAILY_CHALLENGES.length;
@@ -128,6 +159,21 @@ export default function Games() {
         }
     };
 
+    const clearPatternTimer = () => {
+        if (patternTimerRef.current) {
+            clearTimeout(patternTimerRef.current);
+            patternTimerRef.current = null;
+        }
+    };
+
+    const triggerPatternReveal = (levelKey) => {
+        clearPatternTimer();
+        setPatternReveal(true);
+        patternTimerRef.current = setTimeout(() => {
+            setPatternReveal(false);
+        }, LEVELS[levelKey].revealMs);
+    };
+
     const progressPercent = useMemo(() => {
         if (activeTab === 'color') {
             if (colorDone) return 100;
@@ -139,9 +185,14 @@ export default function Games() {
             return Math.min(100, ((objectCount - 1) / levelConfig.rounds) * 100);
         }
 
+        if (activeTab === 'pattern') {
+            if (patternDone) return 100;
+            return Math.min(100, ((patternCount - 1) / levelConfig.patternRounds) * 100);
+        }
+
         if (reactionDone) return 100;
         return Math.min(100, (reactionCount / levelConfig.reactionRounds) * 100);
-    }, [activeTab, colorCount, colorDone, objectCount, objectDone, reactionCount, reactionDone, levelConfig]);
+    }, [activeTab, colorCount, colorDone, objectCount, objectDone, patternCount, patternDone, reactionCount, reactionDone, levelConfig]);
 
     const bestForActive = useMemo(() => {
         return bestStats?.[activeTab]?.[level] || null;
@@ -154,7 +205,12 @@ export default function Games() {
     useEffect(() => {
         return () => {
             clearReactionTimer();
+            clearPatternTimer();
         };
+    }, []);
+
+    useEffect(() => {
+        triggerPatternReveal(level);
     }, []);
 
     useEffect(() => {
@@ -273,9 +329,8 @@ export default function Games() {
     };
 
     const setDifficulty = (nextLevel) => {
-        if (reactionTimerRef.current) {
-            clearTimeout(reactionTimerRef.current);
-        }
+        clearReactionTimer();
+        clearPatternTimer();
 
         setLevel(nextLevel);
         setColorCount(1);
@@ -294,6 +349,16 @@ export default function Games() {
         setObjectDone(false);
         setObjectRound(nextObjectRound(nextLevel));
 
+        setPatternCount(1);
+        setPatternScore(0);
+        setPatternHits(0);
+        setPatternStreak(0);
+        setPatternTimes([]);
+        setPatternDone(false);
+        setPatternInput([]);
+        setPatternRound(nextPatternRound(nextLevel));
+        triggerPatternReveal(nextLevel);
+
         setReactionState('idle');
         setReactionMessage('Press Start and wait for GREEN.');
         setReactionCount(0);
@@ -308,6 +373,63 @@ export default function Games() {
     const startDailyChallenge = () => {
         setActiveTab(dailyChallenge.tab);
         setDifficulty(dailyChallenge.level);
+    };
+
+    const resetPattern = () => {
+        clearPatternTimer();
+        setPatternCount(1);
+        setPatternScore(0);
+        setPatternHits(0);
+        setPatternStreak(0);
+        setPatternTimes([]);
+        setPatternDone(false);
+        setPatternInput([]);
+        setPatternRound(nextPatternRound(level));
+        triggerPatternReveal(level);
+    };
+
+    const advancePatternRound = (success) => {
+        const reaction = Date.now() - patternRound.startedAt;
+        const newTimes = [...patternTimes, reaction];
+        const newAvg = newTimes.reduce((a, b) => a + b, 0) / newTimes.length;
+        const nextStreak = success ? patternStreak + 1 : 0;
+        const bonus = success ? Math.min(patternStreak, 2) : 0;
+        const pointsGain = success ? 1 + bonus : 0;
+        const nextScore = patternScore + pointsGain;
+        const nextHits = patternHits + (success ? 1 : 0);
+
+        setPatternTimes(newTimes);
+        setPatternStreak(nextStreak);
+        setPatternScore(nextScore);
+        setPatternHits(nextHits);
+
+        if (patternCount >= levelConfig.patternRounds) {
+            setPatternDone(true);
+            updateBestStats('pattern', level, nextScore, newAvg);
+            return;
+        }
+
+        setPatternCount((prev) => prev + 1);
+        setPatternInput([]);
+        setPatternRound(nextPatternRound(level));
+        triggerPatternReveal(level);
+    };
+
+    const handlePatternPick = (symbol) => {
+        if (patternDone || patternReveal) return;
+
+        const nextInput = [...patternInput, symbol];
+        setPatternInput(nextInput);
+
+        const expected = patternRound.sequence[nextInput.length - 1];
+        if (symbol !== expected) {
+            advancePatternRound(false);
+            return;
+        }
+
+        if (nextInput.length >= patternRound.sequence.length) {
+            advancePatternRound(true);
+        }
     };
 
     const finalizeReactionRound = (success, reactionMs) => {
@@ -458,6 +580,12 @@ export default function Games() {
                         Object Speed Test
                     </button>
                     <button
+                        className={`games-tab ${activeTab === 'pattern' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('pattern')}
+                    >
+                        Pattern Recall
+                    </button>
+                    <button
                         className={`games-tab ${activeTab === 'reaction' ? 'active' : ''}`}
                         onClick={() => setActiveTab('reaction')}
                     >
@@ -548,6 +676,60 @@ export default function Games() {
                                 <p>You got {objectHits} exact hits and {objectScore} points.</p>
                                 <p>Your average response time is {objectAvg.toFixed(0)} ms.</p>
                                 <button className="btn-premium" onClick={resetObject}>Play Again</button>
+                            </div>
+                        )}
+                    </section>
+                )}
+
+                {activeTab === 'pattern' && (
+                    <section className="game-card">
+                        <div className="game-meta">
+                            <span>Round {patternCount}/{levelConfig.patternRounds}</span>
+                            <span>Score: {patternScore}</span>
+                            <span>Hits: {patternHits}</span>
+                            <span>Streak: {patternStreak}</span>
+                            <span>Avg: {patternAvg ? `${patternAvg.toFixed(0)} ms` : '--'}</span>
+                        </div>
+
+                        {!patternDone ? (
+                            <>
+                                <h2 className="game-title">Pattern Recall</h2>
+                                <p className="pattern-help">Memorize the sequence, then repeat it in the same order.</p>
+
+                                <div className={`pattern-sequence ${patternReveal ? 'revealing' : 'hidden'}`}>
+                                    {patternRound.sequence.map((item, idx) => (
+                                        <span key={`${item}-${idx}`} className="pattern-chip">{patternReveal ? item : '?'}</span>
+                                    ))}
+                                </div>
+
+                                <div className="pattern-input-preview">
+                                    Input: {patternInput.length ? patternInput.join(' ') : '--'}
+                                </div>
+
+                                <div className="pattern-pad">
+                                    {PATTERN_SYMBOLS.map((symbol) => (
+                                        <button
+                                            key={symbol}
+                                            className="pattern-btn"
+                                            onClick={() => handlePatternPick(symbol)}
+                                            disabled={patternReveal}
+                                        >
+                                            {symbol}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="reaction-controls">
+                                    <button className="game-btn-ghost" onClick={() => setPatternInput([])} disabled={patternReveal}>Clear Input</button>
+                                    <button className="game-btn-ghost" onClick={() => triggerPatternReveal(level)}>Show Again</button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="game-result">
+                                <h3>Pattern Recall Complete</h3>
+                                <p>You got {patternHits} exact rounds and {patternScore} points.</p>
+                                <p>Your average solve time is {patternAvg.toFixed(0)} ms.</p>
+                                <button className="btn-premium" onClick={resetPattern}>Play Again</button>
                             </div>
                         )}
                     </section>

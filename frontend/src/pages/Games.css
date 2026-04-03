@@ -252,6 +252,71 @@
     color: #d5e2f5;
 }
 
+.pattern-help {
+    color: #d6e5fb;
+    margin-bottom: 12px;
+}
+
+.pattern-sequence {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.pattern-chip {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.04);
+    color: #f5f9ff;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.pattern-sequence.revealing .pattern-chip {
+    background: rgba(244, 211, 94, 0.16);
+    border-color: rgba(244, 211, 94, 0.45);
+}
+
+.pattern-input-preview {
+    margin-bottom: 12px;
+    color: #d8e6fb;
+    font-size: 0.92rem;
+}
+
+.pattern-pad {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(44px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.pattern-btn {
+    min-height: 56px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.04);
+    color: #f5f9ff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.pattern-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.42);
+}
+
+.pattern-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .reaction-help {
     color: #d6e5fb;
     margin-bottom: 12px;
@@ -345,5 +410,9 @@
     .object-cell {
         min-height: 64px;
         font-size: 1.6rem;
+    }
+
+    .pattern-pad {
+        grid-template-columns: repeat(3, minmax(44px, 1fr));
     }
 }
